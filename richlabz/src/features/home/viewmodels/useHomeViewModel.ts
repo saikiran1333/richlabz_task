@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { images } from '../../../assets';
+import { useDeviceLocation } from '../../../hooks/use-device-location';
 import {
   HeroSlide,
   ConstructionItem,
@@ -16,7 +17,7 @@ export function useHomeViewModel() {
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const location = { displayName: 'Madhapur, Hyderabad' };
+  const location = useDeviceLocation();
 
   const heroSlides: HeroSlide[] = [
     {
