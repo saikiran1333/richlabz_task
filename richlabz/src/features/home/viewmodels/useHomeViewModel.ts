@@ -21,21 +21,21 @@ export function useHomeViewModel() {
   const heroSlides: HeroSlide[] = [
     {
       id: 'hero-1',
-      title: 'Guest House layout',
+      title: 'Modern Villa',
       subtitle: 'Completed Project',
-      image: images.hero.placeholder,
+      image: images.hero.coursal1,
     },
     {
       id: 'hero-2',
-      title: 'Modern Villa',
+      title: 'Commercial Project',
       subtitle: 'Completed Project',
-      image: images.hero.placeholder,
+      image: images.hero.coursal2,
     },
     {
       id: 'hero-3',
-      title: 'Commercial Project',
+      title: 'Guest House layout',
       subtitle: 'Completed Project',
-      image: images.hero.placeholder,
+      image: images.hero.coursal3,
     },
   ];
 
@@ -54,21 +54,22 @@ export function useHomeViewModel() {
   };
 
   const pieceWorks: PieceWorkItem[] = [
-    { id: 'interiors', title: 'Interiors', image: images.pieceWorks.placeholder },
-    { id: 'plumbing', title: 'Plumbing', image: images.pieceWorks.placeholder },
-    { id: 'electrical', title: 'Electrical', image: images.pieceWorks.placeholder },
-    { id: 'painting', title: 'Painting', image: images.pieceWorks.placeholder },
+    { id: 'interiors', title: 'Interiors', image: images.pieceWorks.interiors },
+    { id: 'plumbing', title: 'Plumbing', image: images.pieceWorks.plumbing },
+    { id: 'electrical', title: 'Electrical', image: images.pieceWorks.electrical },
+    { id: 'painting', title: 'Painting', image: images.pieceWorks.painting },
   ];
 
   const additionalServices: AdditionalServiceItem[] = [
-    { id: 'pmc', title: 'PMC Services', image: images.additionalServices.placeholder },
-    { id: 'legal', title: 'Legal Services', image: images.additionalServices.placeholder },
-    { id: 'taxation', title: 'Taxation', image: images.additionalServices.placeholder },
+    { id: 'pmc', title: 'PMC Services', image: images.additionalServices.pmc },
+    { id: 'legal', title: 'Legal Services', image: images.additionalServices.legal },
+    { id: 'taxation', title: 'Taxation', image: images.additionalServices.taxation },
   ];
 
   const testimonials: TestimonialItem[] = [
-    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: '' },
-    { id: 'test-2', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: '' },
+    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://avtshare01.rz.tu-ilmenau.de/avt-vqdb-uhd-1/test_1/segments/bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.mp4' },
+    { id: 'test-2', name: 'John D', role: 'Client', duration: '05:12 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://youtu.be/YYC1gBqkgr0?si=XIJcsVR-uvEOsFNR' },
+    { id: 'test-3', name: 'Sarah M', role: 'Customer', duration: '01:45 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://youtu.be/EmP39S57QFQ?si=1tNAOnfaJsqH4hGn' },
   ];
 
   const vendor: VendorBanner = {
@@ -78,15 +79,15 @@ export function useHomeViewModel() {
   };
 
   const machinery: MachineryItem[] = [
-    { id: 'excavators', title: 'Excavators', image: images.machinery.placeholder },
-    { id: 'tractors', title: 'Tractors', image: images.machinery.placeholder },
-    { id: 'cranes', title: 'Cranes', image: images.machinery.placeholder },
+    { id: 'excavators', title: 'Excavators', image: images.machinery.excavator },
+    { id: 'tractors', title: 'Tractors', image: images.machinery.tractor },
+    { id: 'cranes', title: 'Cranes', image: images.machinery.crane },
   ];
 
   const materials: MaterialItem[] = [
-    { id: 'steel', title: 'Iron & Steel Rods', image: images.materials.placeholder },
-    { id: 'cement', title: 'Cement', image: images.materials.placeholder },
-    { id: 'plywood', title: 'Plywood', image: images.materials.placeholder },
+    { id: 'steel', title: 'Iron & Steel Rods', image: images.materials.steel },
+    { id: 'cement', title: 'Cement', image: images.materials.cement },
+    { id: 'plywood', title: 'Plywood', image: images.materials.plywood },
   ];
 
   return {

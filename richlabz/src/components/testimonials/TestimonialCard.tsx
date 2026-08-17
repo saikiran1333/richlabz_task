@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Pressable, Linking } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
@@ -7,8 +7,16 @@ import { typography } from '../../theme/typography';
 import { TestimonialItem } from '../../features/home/models/home.models';
 
 export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPress?: () => void }) {
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else if (item.videoUrl) {
+      Linking.openURL(item.videoUrl).catch(err => console.log("Failed to open URL:", err));
+    }
+  };
+
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={handlePress}>
       <ImageBackground
         source={item.thumbnail}
         style={styles.card}
