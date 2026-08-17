@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 import { spacing } from '../../theme/spacing';
@@ -21,6 +22,9 @@ interface StickyHeroProps {
 export function StickyHero({ location, searchText, onSearchChange, slides }: StickyHeroProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  // targetSdk 36 draws edge-to-edge, so the gradient runs behind the status bar
+  // while the content below it is pushed clear of the notch/cutout.
+  const insets = useSafeAreaInsets();
 
   // Auto-scroll every 2.5 seconds
   useEffect(() => {
@@ -66,7 +70,7 @@ export function StickyHero({ location, searchText, onSearchChange, slides }: Sti
         colors={[colors.heroBlueLeft, colors.heroBlueRight]}
         start={{ x: 0, y: 0.05 }}
         end={{ x: 1, y: 0.35 }}
-        style={styles.heroGradient}
+        style={[styles.heroGradient, { paddingTop: insets.top + 16 }]}
       >
         <View style={styles.locationRow}>
           <Ionicons name="location" size={20} color={colors.white} />
@@ -125,7 +129,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
   heroGradient: {
-    paddingTop: 16,
     paddingBottom: 24,
   },
   locationRow: {
