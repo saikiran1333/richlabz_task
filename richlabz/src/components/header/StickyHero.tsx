@@ -52,18 +52,6 @@ export function StickyHero({ location, searchText, onSearchChange, slides }: Sti
         <View style={styles.textContent}>
           <Text style={styles.heroTitle}>{item.title}</Text>
           <Text style={styles.heroSubtitle}>{item.subtitle}</Text>
-          
-          <View style={styles.pagination}>
-            {slides.map((_, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.dot,
-                  i === currentIndex && styles.dotActive
-                ]}
-              />
-            ))}
-          </View>
         </View>
         <View style={styles.imageContainer}>
           <Image source={item.image} style={styles.heroImage} resizeMode="contain" />
@@ -111,6 +99,18 @@ export function StickyHero({ location, searchText, onSearchChange, slides }: Sti
             onScroll={onScroll}
             scrollEventThrottle={16}
           />
+          
+          <View style={styles.pagination}>
+            {slides.map((_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.dot,
+                  i === currentIndex && styles.dotActive
+                ]}
+              />
+            ))}
+          </View>
         </View>
       </LinearGradient>
     </View>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
   heroGradient: {
-    paddingTop: 48,
+    paddingTop: 16,
     paddingBottom: 24,
   },
   locationRow: {
@@ -181,16 +181,19 @@ const styles = StyleSheet.create({
   },
   pagination: {
     flexDirection: 'row',
-    marginTop: spacing.xl,
+    position: 'absolute',
+    bottom: 10,
+    left: spacing.pageHorizontal,
   },
   dot: {
-    width: 16,
+    width: 12,
     height: 4,
     borderRadius: 2,
     backgroundColor: 'rgba(255,255,255,0.4)',
     marginRight: 6,
   },
   dotActive: {
+    width: 24,
     backgroundColor: colors.white,
   },
   imageContainer: {
