@@ -1,7 +1,7 @@
 export const images = {
   hero: {
-    coursal1: require('../../assets/images/coursal/coursali.jpg'),
-    coursal2: require('../../assets/images/coursal/coursalii.jpg'),
+    coursal1: require('../../assets/images/coursal/coursali.png'),
+    coursal2: require('../../assets/images/coursal/coursalii.png'),
     coursal3: require('../../assets/images/coursal/coursaliii.png'),
     placeholder: require('./images/hero/hero-placeholder.png'),
   },

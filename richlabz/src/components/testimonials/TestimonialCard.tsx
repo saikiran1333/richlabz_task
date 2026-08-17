@@ -1,47 +1,113 @@
-import { View, Text, StyleSheet, ImageBackground, Pressable, Linking } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ImageBackground, Pressable, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 import { radii } from '../../theme/radii';
 import { typography } from '../../theme/typography';
 import { TestimonialItem } from '../../features/home/models/home.models';
+import { useVideoPlayer, VideoView } from 'expo-video';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPress?: () => void }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const player = useVideoPlayer(item.videoUrl, (player) => {
+    player.loop = true;
+  });
+
   const handlePress = () => {
     if (onPress) {
       onPress();
     } else if (item.videoUrl) {
-      Linking.openURL(item.videoUrl).catch(err => console.log("Failed to open URL:", err));
+      setModalVisible(true);
+      player.play();
+      setIsPlaying(true);
     }
   };
 
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      player.pause();
+      setIsPlaying(false);
+    } else {
+      player.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleClose = () => {
+    setModalVisible(false);
+    player.pause();
+    setIsPlaying(false);
+  };
+
   return (
-    <Pressable onPress={handlePress}>
-      <ImageBackground
-        source={item.thumbnail}
-        style={styles.card}
-        imageStyle={styles.imageStyle}
-      >
-        <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.75)']}
-          start={{ x: 0.5, y: 0.25 }}
-          end={{ x: 0.5, y: 1 }}
-          style={styles.videoOverlay}
+    <>
+      <Pressable onPress={handlePress}>
+        <ImageBackground
+          source={item.thumbnail}
+          style={styles.card}
+          imageStyle={styles.imageStyle}
         >
-          <View style={styles.playIconContainer}>
-            <Ionicons name="play-circle-outline" size={48} color={colors.white} />
-          </View>
-          
-          <View style={styles.bottomInfo}>
-            <View style={styles.userInfo}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.role}>{item.role}</Text>
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.75)']}
+            start={{ x: 0.5, y: 0.25 }}
+            end={{ x: 0.5, y: 1 }}
+            style={styles.videoOverlay}
+          >
+            <View style={styles.playIconContainer}>
+              <Ionicons name="play-circle-outline" size={48} color={colors.white} />
             </View>
-            <Text style={styles.duration}>{item.duration}</Text>
+            
+            <View style={styles.bottomInfo}>
+              <View style={styles.userInfo}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.role}>{item.role}</Text>
+              </View>
+              <Text style={styles.duration}>{item.duration}</Text>
+            </View>
+          </LinearGradient>
+        </ImageBackground>
+      </Pressable>
+
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={handleClose}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
+            <Ionicons name="close" size={32} color={colors.white} />
+          </TouchableOpacity>
+
+          <View style={styles.videoContainer}>
+            <ImageBackground
+              source={item.thumbnail}
+              style={StyleSheet.absoluteFillObject}
+              resizeMode="cover"
+            />
+            <VideoView
+              player={player}
+              style={styles.fullVideo}
+              showsUserControls={false}
+              contentFit="cover"
+            />
+            <Pressable 
+              style={styles.playPauseOverlay} 
+              onPress={togglePlayPause}
+            >
+              {!isPlaying && (
+                <Ionicons name="play-circle" size={80} color="white" style={{ opacity: 0.8 }} />
+              )}
+            </Pressable>
           </View>
-        </LinearGradient>
-      </ImageBackground>
-    </Pressable>
+        </View>
+      </Modal>
+    </>
   );
 }
 
@@ -54,13 +120,13 @@ const styles = StyleSheet.create({
     borderRadius: radii.card,
   },
   videoOverlay: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     borderRadius: radii.card,
     padding: 12,
     justifyContent: 'flex-end',
   },
   playIconContainer: {
-    ...StyleSheet.absoluteFill,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -87,4 +153,33 @@ const styles = StyleSheet.create({
     color: colors.white,
     opacity: 0.8,
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 10,
+    padding: 10,
+  },
+  videoContainer: {
+    width: 195,
+    height: 235,
+    borderRadius: radii.card,
+    overflow: 'hidden',
+    backgroundColor: 'black',
+  },
+  fullVideo: {
+    flex: 1,
+  },
+  playPauseOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  }
 });

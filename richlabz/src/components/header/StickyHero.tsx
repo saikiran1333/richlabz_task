@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   carouselContainer: {
-    height: 140,
+    height: 200,
   },
   carouselItem: {
     flexDirection: 'row',
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   heroImage: {
-    width: '120%',
-    height: '100%',
+    width: '130%',
+    height: '110%',
   },
 });

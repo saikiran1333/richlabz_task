@@ -66,10 +66,11 @@ export function useHomeViewModel() {
     { id: 'taxation', title: 'Taxation', image: images.additionalServices.taxation },
   ];
 
+  const newVideoUrl = 'https://drive.google.com/uc?export=download&id=1L_h5zM1N58fbBMJ4JtYv3vbV1ZLRRvVl&utm_source=chatgpt.com';
   const testimonials: TestimonialItem[] = [
-    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://avtshare01.rz.tu-ilmenau.de/avt-vqdb-uhd-1/test_1/segments/bigbuck_bunny_8bit_15000kbps_1080p_60.0fps_h264.mp4' },
-    { id: 'test-2', name: 'John D', role: 'Client', duration: '05:12 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://youtu.be/YYC1gBqkgr0?si=XIJcsVR-uvEOsFNR' },
-    { id: 'test-3', name: 'Sarah M', role: 'Customer', duration: '01:45 s', thumbnail: images.testimonials.placeholder, videoUrl: 'https://youtu.be/EmP39S57QFQ?si=1tNAOnfaJsqH4hGn' },
+    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
+    { id: 'test-2', name: 'John D', role: 'Client', duration: '05:12 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
+    { id: 'test-3', name: 'Sarah M', role: 'Customer', duration: '01:45 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
   ];
 
   const vendor: VendorBanner = {
