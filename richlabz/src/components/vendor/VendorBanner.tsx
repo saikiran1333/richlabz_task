@@ -9,19 +9,17 @@ import { VendorBanner as VendorBannerModel } from '../../features/home/models/ho
 export function VendorBanner({ item }: { item: VendorBannerModel }) {
   return (
     <View style={styles.card}>
+      <Image source={item.image} style={styles.image} resizeMode="cover" />
+
       <View style={styles.textContent}>
         <Text style={styles.title}>{item.title}</Text>
         <View style={styles.divider} />
         <Text style={styles.subtitle}>{item.subtitle}</Text>
-        
+
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Register now</Text>
           <Ionicons name="arrow-forward-circle" size={16} color={colors.white} style={{marginLeft: 4}} />
         </Pressable>
-      </View>
-      
-      <View style={styles.imageContainer}>
-        <Image source={item.image} style={styles.image} resizeMode="contain" />
       </View>
     </View>
   );
@@ -36,6 +34,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     height: 140,
     marginBottom: spacing.xxl,
+  },
+  image: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 1,
   },
   textContent: {
     flex: 1,
@@ -72,20 +80,5 @@ const styles = StyleSheet.create({
     ...typography.small,
     color: colors.white,
     fontWeight: '500',
-  },
-  imageContainer: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    height: '100%',
-    width: '60%',
-    zIndex: 1,
-  },
-  image: {
-    width: '100%',
-    height: '110%',
-    position: 'absolute',
-    bottom: 0,
-    right: -20,
   },
 });

@@ -10,7 +10,7 @@ export function PropertyCareCard({ item }: { item: PropertyCare }) {
   return (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} resizeMode="cover" />
-      
+
       <View style={styles.content}>
         <Text style={styles.title}>{item.title}</Text>
         
@@ -41,12 +41,20 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
   image: {
-    width: 120,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
     height: '100%',
+    zIndex: 1,
   },
   content: {
     flex: 1,
+    marginLeft: 120,
     padding: spacing.md,
+    zIndex: 2,
   },
   title: {
     ...typography.cardTitle,

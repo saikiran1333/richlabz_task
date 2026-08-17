@@ -1,22 +1,57 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Pressable, Modal, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { colors } from '../../theme/colors';
 import { radii } from '../../theme/radii';
 import { typography } from '../../theme/typography';
 import { TestimonialItem } from '../../features/home/models/home.models';
-import { useVideoPlayer, VideoView } from 'expo-video';
+import { useVideoPlayer, VideoView, VideoThumbnail } from 'expo-video';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const CARD_WIDTH = Math.min(230, SCREEN_WIDTH * 0.58);
+const CARD_HEIGHT = Math.round(CARD_WIDTH / 0.827);
+
+const PLAYER_WIDTH = SCREEN_WIDTH * 0.92;
+const PLAYER_HEIGHT = SCREEN_HEIGHT * 0.7;
 
 export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPress?: () => void }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [thumbnail, setThumbnail] = useState<VideoThumbnail | null>(null);
 
   const player = useVideoPlayer(item.videoUrl, (player) => {
     player.loop = true;
   });
+
+  // expo-video has no poster prop, so pull a real frame out of the video once it
+  // is ready and use that as the card thumbnail.
+  useEffect(() => {
+    let cancelled = false;
+
+    const grabFrame = () => {
+      player.generateThumbnailsAsync(1, { maxWidth: 600 })
+        .then(([frame]) => {
+          if (!cancelled && frame) setThumbnail(frame);
+        })
+        .catch(() => {
+          // Unsupported (web) or undecodable source - fall back to item.thumbnail.
+        });
+    };
+
+    if (player.status === 'readyToPlay') grabFrame();
+
+    const sub = player.addListener('statusChange', ({ status }) => {
+      if (status === 'readyToPlay') grabFrame();
+    });
+
+    return () => {
+      cancelled = true;
+      sub.remove();
+    };
+  }, [player]);
 
   const handlePress = () => {
     if (onPress) {
@@ -46,31 +81,32 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
 
   return (
     <>
-      <Pressable onPress={handlePress}>
-        <ImageBackground
-          source={item.thumbnail}
-          style={styles.card}
-          imageStyle={styles.imageStyle}
+      <Pressable onPress={handlePress} style={styles.card}>
+        <Image
+          source={thumbnail ?? item.thumbnail}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={200}
+        />
+
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.75)']}
+          start={{ x: 0.5, y: 0.25 }}
+          end={{ x: 0.5, y: 1 }}
+          style={styles.videoOverlay}
         >
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.75)']}
-            start={{ x: 0.5, y: 0.25 }}
-            end={{ x: 0.5, y: 1 }}
-            style={styles.videoOverlay}
-          >
-            <View style={styles.playIconContainer}>
-              <Ionicons name="play-circle-outline" size={48} color={colors.white} />
+          <View style={styles.playIconContainer}>
+            <Ionicons name="play-circle-outline" size={48} color={colors.white} />
+          </View>
+
+          <View style={styles.bottomInfo}>
+            <View style={styles.userInfo}>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.role}>{item.role}</Text>
             </View>
-            
-            <View style={styles.bottomInfo}>
-              <View style={styles.userInfo}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.role}>{item.role}</Text>
-              </View>
-              <Text style={styles.duration}>{item.duration}</Text>
-            </View>
-          </LinearGradient>
-        </ImageBackground>
+            <Text style={styles.duration}>{item.duration}</Text>
+          </View>
+        </LinearGradient>
       </Pressable>
 
       <Modal
@@ -85,19 +121,19 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
           </TouchableOpacity>
 
           <View style={styles.videoContainer}>
-            <ImageBackground
-              source={item.thumbnail}
-              style={StyleSheet.absoluteFillObject}
-              resizeMode="cover"
+            <Image
+              source={thumbnail ?? item.thumbnail}
+              style={StyleSheet.absoluteFill}
+              contentFit="contain"
             />
             <VideoView
               player={player}
               style={styles.fullVideo}
-              showsUserControls={false}
-              contentFit="cover"
+              nativeControls={false}
+              contentFit="contain"
             />
-            <Pressable 
-              style={styles.playPauseOverlay} 
+            <Pressable
+              style={styles.playPauseOverlay}
               onPress={togglePlayPause}
             >
               {!isPlaying && (
@@ -113,20 +149,19 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
 
 const styles = StyleSheet.create({
   card: {
-    width: 195,
-    height: 235,
-  },
-  imageStyle: {
+    width: CARD_WIDTH,
+    height: CARD_HEIGHT,
     borderRadius: radii.card,
+    overflow: 'hidden',
+    backgroundColor: colors.borderLight,
   },
   videoOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: radii.card,
+    ...StyleSheet.absoluteFill,
     padding: 12,
     justifyContent: 'flex-end',
   },
   playIconContainer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -167,8 +202,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   videoContainer: {
-    width: 195,
-    height: 235,
+    width: PLAYER_WIDTH,
+    height: PLAYER_HEIGHT,
     borderRadius: radii.card,
     overflow: 'hidden',
     backgroundColor: 'black',
@@ -177,7 +212,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   playPauseOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',

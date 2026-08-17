@@ -66,11 +66,12 @@ export function useHomeViewModel() {
     { id: 'taxation', title: 'Taxation', image: images.additionalServices.taxation },
   ];
 
-  const newVideoUrl = 'https://drive.google.com/uc?export=download&id=1L_h5zM1N58fbBMJ4JtYv3vbV1ZLRRvVl&utm_source=chatgpt.com';
+  const driveVideoUrl = (fileId: string) => `https://drive.google.com/uc?export=download&id=${fileId}`;
+
   const testimonials: TestimonialItem[] = [
-    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
-    { id: 'test-2', name: 'John D', role: 'Client', duration: '05:12 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
-    { id: 'test-3', name: 'Sarah M', role: 'Customer', duration: '01:45 s', thumbnail: images.testimonials.placeholder, videoUrl: newVideoUrl },
+    { id: 'test-1', name: 'Santosh P', role: 'Manager', duration: '02:35 s', thumbnail: images.testimonials.placeholder, videoUrl: driveVideoUrl('1h0BhZRzhsPgUlAv27L0kSslTNXqsQzTR') },
+    { id: 'test-2', name: 'John D', role: 'Client', duration: '05:12 s', thumbnail: images.testimonials.placeholder, videoUrl: driveVideoUrl('1DS2NK6E5PEoqUc2F1fKEVaITl4S0UvoK') },
+    { id: 'test-3', name: 'Sarah M', role: 'Customer', duration: '01:45 s', thumbnail: images.testimonials.placeholder, videoUrl: driveVideoUrl('1N-i6YH831uqouWskp5MQw4gjzctPTEmj') },
   ];
 
   const vendor: VendorBanner = {
