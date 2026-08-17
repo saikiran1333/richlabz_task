@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginLeft: 120,
+    // Proportional so the copy keeps clearing the artwork's subject at any width.
+    marginLeft: '34%',
     padding: spacing.md,
     zIndex: 2,
   },

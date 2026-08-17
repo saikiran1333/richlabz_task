@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Modal, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Modal, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -9,15 +9,15 @@ import { typography } from '../../theme/typography';
 import { TestimonialItem } from '../../features/home/models/home.models';
 import { useVideoPlayer, VideoView, VideoThumbnail } from 'expo-video';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-const CARD_WIDTH = Math.min(230, SCREEN_WIDTH * 0.58);
-const CARD_HEIGHT = Math.round(CARD_WIDTH / 0.827);
-
-const PLAYER_WIDTH = SCREEN_WIDTH * 0.92;
-const PLAYER_HEIGHT = SCREEN_HEIGHT * 0.7;
+const CARD_ASPECT_RATIO = 0.827;
 
 export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPress?: () => void }) {
+  // Read per-render so the card resizes on rotation, split-screen and foldables.
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
+  const cardWidth = Math.min(230, screenWidth * 0.58);
+  const cardHeight = Math.round(cardWidth / CARD_ASPECT_RATIO);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [thumbnail, setThumbnail] = useState<VideoThumbnail | null>(null);
@@ -81,7 +81,7 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
 
   return (
     <>
-      <Pressable onPress={handlePress} style={styles.card}>
+      <Pressable onPress={handlePress} style={[styles.card, { width: cardWidth, height: cardHeight }]}>
         <Image
           source={thumbnail ?? item.thumbnail}
           style={StyleSheet.absoluteFill}
@@ -120,7 +120,7 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
             <Ionicons name="close" size={32} color={colors.white} />
           </TouchableOpacity>
 
-          <View style={styles.videoContainer}>
+          <View style={[styles.videoContainer, { width: screenWidth * 0.92, height: screenHeight * 0.7 }]}>
             <Image
               source={thumbnail ?? item.thumbnail}
               style={StyleSheet.absoluteFill}
@@ -149,8 +149,6 @@ export function TestimonialCard({ item, onPress }: { item: TestimonialItem, onPr
 
 const styles = StyleSheet.create({
   card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     borderRadius: radii.card,
     overflow: 'hidden',
     backgroundColor: colors.borderLight,
@@ -202,8 +200,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   videoContainer: {
-    width: PLAYER_WIDTH,
-    height: PLAYER_HEIGHT,
     borderRadius: radii.card,
     overflow: 'hidden',
     backgroundColor: 'black',

@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F2F1', // based on reference
     flexDirection: 'row',
     overflow: 'hidden',
-    height: 140,
+    // minHeight rather than height so the copy can grow the card on narrow
+    // screens instead of being clipped by overflow: hidden.
+    minHeight: 140,
     marginBottom: spacing.xxl,
   },
   image: {
